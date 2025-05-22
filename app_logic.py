@@ -58,8 +58,14 @@ class AppLogic:
             try:
                 with open(config_file, "r") as f:
                     config = json.load(f)
-                    return config.get("vt_api_key", "")
-            except Exception:
+                    api_key = config.get("vt_api_key", "")
+                    if isinstance(api_key, str):
+                        return api_key
+                    else:
+                        print("Uyarı: config.json içindeki API anahtarı string değil")
+                        return ""
+            except Exception as e:
+                print(f"config.json okuma hatası: {e}")
                 return ""
         return ""
     

@@ -39,8 +39,10 @@ def load_api_key():
             with open(config_file, "r") as f:
                 config = json.load(f)
                 api_key = config.get("vt_api_key")
-                if api_key:
+                if api_key and isinstance(api_key, str) and len(api_key) > 0:
                     return api_key
+                else:
+                    print("config.json dosyasında API anahtarı bulunamadı veya geçersiz.")
         except Exception as e:
             print(f"config.json dosyası okunurken hata: {e}")
     
