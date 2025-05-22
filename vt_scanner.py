@@ -4,13 +4,56 @@ import vt
 import os
 import time
 import asyncio
+import json
+from pathlib import Path
 
-# API Anahtarınızı buraya girin veya ortam değişkeninden/ .env dosyasından okuyun
-# Örnek: API_KEY = os.environ.get('VT_API_KEY')
-API_KEY = "69a94829d52aa118aae8757429147393c528ddd3fc8ddbe1e88cc8751764875e" # <<<<< BURAYA KENDİ API ANAHTARINIZI GİRİN!
+# API anahtarını yükleme fonksiyonu
+def load_api_key():
+    """
+    API anahtarını çeşitli kaynaklardan yüklemeye çalışır:
+    1. Ortam değişkeni (VT_API_KEY)
+    2. .env dosyası (python-dotenv kütüphanesi varsa)
+    3. config.json dosyası
+    """
+    # 1. Ortam değişkeninden yükleme
+    api_key = os.environ.get('VT_API_KEY')
+    if api_key:
+        return api_key
+    
+    # 2. .env dosyasından yükleme (python-dotenv kütüphanesi varsa)
+    try:
+        from dotenv import load_dotenv
+        env_path = Path('.') / '.env'
+        if env_path.exists():
+            load_dotenv()
+            api_key = os.environ.get('VT_API_KEY')
+            if api_key:
+                return api_key
+    except ImportError:
+        pass  # python-dotenv kütüphanesi yüklü değil
+    
+    # 3. config.json dosyasından yükleme
+    config_file = "config.json"
+    if os.path.exists(config_file):
+        try:
+            with open(config_file, "r") as f:
+                config = json.load(f)
+                api_key = config.get("vt_api_key")
+                if api_key:
+                    return api_key
+        except Exception as e:
+            print(f"config.json dosyası okunurken hata: {e}")
+    
+    return None
+
+# API anahtarını yükle
+API_KEY = load_api_key()
 
 if not API_KEY:
-    raise ValueError("Lütfen VirusTotal API anahtarınızı vt_scanner.py dosyasına girin veya ortam değişkeni olarak ayarlayın.")
+    print("UYARI: VirusTotal API anahtarı bulunamadı. Lütfen aşağıdaki yöntemlerden biriyle API anahtarınızı ayarlayın:")
+    print("1. Ortam değişkeni olarak: VT_API_KEY=your_api_key")
+    print("2. .env dosyası oluşturun: VT_API_KEY=your_api_key")
+    print("3. config.json dosyası oluşturun: {\"vt_api_key\": \"your_api_key\"}")
 
 # Asenkron client ve senkronizasyon mekanizmaları
 class VirusTotalScanner:
