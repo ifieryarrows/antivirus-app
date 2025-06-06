@@ -469,7 +469,7 @@ VirusTotal API Anahtarı:
         about_text = """
 Modern Antivirüs Uygulaması
 Sürüm: 1.0 (GUI Geliştirilmiş)
-Geliştirici: [Sinan Soytürk]
+Geliştirici: [Gökhan SOYTÜRK]
 
 Bu uygulama, yerel ve VirusTotal tabanlı tarama yetenekleri sunar.
 """
