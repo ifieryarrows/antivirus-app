@@ -20,7 +20,7 @@ Uygulamayı kurmak ve çalıştırmak için şu adımları izleyin:
 
 1.  **Depoyu Klonlayın**:
     ```bash
-    git clone <repository_url>
+    git clone https://github.com/ifieryarrows/antivirus-app.git
     cd antivirus-app
     ```
 
